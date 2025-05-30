@@ -70,6 +70,19 @@ def get_numbers(use_random):
             return None, None
     return num1, num2
 
+
+def factorials():
+    while True:
+        print("\n welcome to the factorial calculator (Inspired by Niko!)")
+        print('[1]superfactorial 1 n 2')
+        print('[2]hyperfactorial')
+        print('[3]Factorial')
+        print('[4]double, triple, etc factorial')
+        print('[5]subfactorial')
+        print('[6]primorial 1 n 2')
+        print('[7]exponential factorial')
+        print('[0]Back')
+        FactorialChoice = get_user_choice("Choose an operation (0-7: ", [str(i) for i in range(8)])
 def advanced_calculator():
     while True:
         print("\nAdvanced Operations (No randoms will be used.):")
@@ -90,7 +103,7 @@ def advanced_calculator():
                 break
             elif choice == '1':
                 num = float(input("Enter a number: "))
-                print(f"√{num} = {math.sqrt(num)}")
+                print(f"√{num} = ±{math.sqrt(num)}")
             elif choice == '2':
                 base = float(input("Enter the base: "))
                 exponent = float(input("Enter the exponent: "))
@@ -266,7 +279,7 @@ def number_guessing_game():
 
     while balance >= 10:
         try:
-            guess = int(input("Enter your guess (1-10), win 5x wager if correct, lose 2x if wrong: "))
+            guess = int(input("Enter your guess (1-10),  win 5x wager if correct, lose 2x if wrong('exit' to leave)): "))
             if guess < 1 or guess > 10:
                 print("Invalid guess. Enter a number between 1 and 10.")
                 continue
@@ -460,7 +473,7 @@ def mainhub():
     elif choice == '6':
         work()
     elif choice == 'credits':
-        print("Made by Oscar Lora Tzunun. Thanks to ChatGPT for support!")
+        print("Made by Alt2662. Thanks to ChatGPT for the optimization, and 'Niko' for certain optimization.")
 
 
 username = get_username()
