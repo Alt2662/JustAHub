@@ -1,10 +1,77 @@
 import random
 import math
-
+from logging import exception
+import keyboard
 # Global balance and username
 balance = 100.0
+import time
+import turtle
 username = ""
 
+
+# Key state flags
+key_state = {
+    'w': False,
+    's': False,
+    'a': False,
+    'd': False
+}
+
+def run_turtle_game():
+    wn = turtle.Screen()
+    wn.title("JustAHub, Python Turtle demo.")
+    wn.setup(width=600, height=600)
+    wn.tracer(0)  # turns off auto updating; smoother movement
+
+    t = turtle.Turtle()
+    t.speed(0)
+
+    # move check loop
+    def move():
+        if key_state['w']:
+            t.forward(5)
+        if key_state['s']:
+            t.backward(5)
+        if key_state['a']:
+            t.left(5)
+        if key_state['d']:
+            t.right(5)
+
+        wn.update()
+        wn.ontimer(move, 17)  # checks every 17 milliseconds (60 ish FPS)
+
+    # key presses
+    def press_w(): key_state['w'] = True
+    def release_w(): key_state['w'] = False
+
+    def press_s(): key_state['s'] = True
+    def release_s(): key_state['s'] = False
+
+    def press_a(): key_state['a'] = True
+    def release_a(): key_state['a'] = False
+
+    def press_d(): key_state['d'] = True
+    def release_d(): key_state['d'] = False
+
+    def quit_game():
+        wn.bye()
+
+    # Bind keys for press
+    wn.onkeypress(press_w, 'w')
+    wn.onkeypress(press_s, 's')
+    wn.onkeypress(press_a, 'a')
+    wn.onkeypress(press_d, 'd')
+    wn.onkeypress(quit_game, 'e')
+
+    # Bind keys for release
+    wn.onkeyrelease(release_w, 'w')
+    wn.onkeyrelease(release_s, 's')
+    wn.onkeyrelease(release_a, 'a')
+    wn.onkeyrelease(release_d, 'd')
+
+    wn.listen()
+    move()  # start the move loops
+    wn.mainloop()
 def get_wager():
     global balance
     while True:
@@ -73,16 +140,48 @@ def get_numbers(use_random):
 
 def factorials():
     while True:
-        print("\n welcome to the factorial calculator (Inspired by Niko!)")
-        print('[1]superfactorial 1 n 2')
-        print('[2]hyperfactorial')
-        print('[3]Factorial')
-        print('[4]double, triple, etc factorial')
-        print('[5]subfactorial')
-        print('[6]primorial 1 n 2')
-        print('[7]exponential factorial')
-        print('[0]Back')
-        FactorialChoice = get_user_choice("Choose an operation (0-7: ", [str(i) for i in range(8)])
+        try:
+            print("\nWelcome to the factorial calculator (Inspired by Niko!)")
+            print('[1] Factorials')
+            print('[2] Superfactorial')
+            print('[3] hyperfactorial')
+            print('[4] Double/Triple/etc Factorial (Not implemented)')
+            print('[5] Subfactorial (Not implemented)')
+            print('[6] Primorial (Not implemented)')
+            print('[7] Exponential Factorial (Not implemented)')
+            print('[0] Back')
+            choice = get_user_choice("Choose an operation (0-7): ", [str(i) for i in range(8)])
+
+            if choice == '0':
+                break
+            elif choice == '1':
+                num = int(input("Enter a non-negative integer: "))
+                if num < 0:
+                    print("Factorial is not defined for negative numbers.")
+                else:
+                    print(f"{num}! = {math.factorial(num)}")
+            elif choice == '2':
+                num = int(input("Enter the factorial number: "))
+                if num <= 0:
+                    print("Please enter a positive number.")
+                else:
+                    result = 1
+                    for i in range(1, num + 1):
+                        result *= math.factorial(i)
+                    print(f"Superfactorial of {num} = {result}")
+            elif choice == '3':
+                result = 1
+                for i in range(1, num + 1):
+                    result *= i ** i
+                print("Hyperfactorial of {num} = {result}")
+            else:
+                print("This option is not yet implemented.")
+        except ValueError:
+            print("Invalid input! Please enter an integer.")
+        except Exception as e:
+            print("Error:", e)
+
+
 def advanced_calculator():
     while True:
         print("\nAdvanced Operations (No randoms will be used.):")
@@ -127,11 +226,7 @@ def advanced_calculator():
                 num = float(input("Enter the exponent (x) for e^x: "))
                 print(f"e^{num} = {math.exp(num)}")
             elif choice == '9':
-                num = int(input("Enter a non-negative integer: "))
-                if num < 0:
-                    print("Factorial is not defined for negative numbers.")
-                else:
-                    print(f"{num}! = {math.factorial(num)}")
+                factorials()
         except ValueError:
             print("Invalid input. Please enter a valid number.")
         except Exception as e:
@@ -445,7 +540,9 @@ def work():
             print(f"Incorrect. The correct answer was {answer}.")
 
 def mainhub():
+    global balance
     global username
+
     print(f"\nWelcome to the main hub, {username}. Your balance: {balance}")
 
     choice = get_user_choice(
@@ -456,8 +553,9 @@ def mainhub():
         " [4] Number Guessing Game\n"
         " [5] Hangman\n"
         " [6] Work for 25 credits\n"
+        " [7] Turtle Movement\n"
         " [credits] See the incredible person who made this!\n> ",
-        ['1', '2', '3', '4', '5', '6', 'credits']
+        ['1', '2', '3', '4', '5', '6', '7', 'credits']
     )
 
     if choice == '1':
@@ -472,8 +570,12 @@ def mainhub():
         hangman()
     elif choice == '6':
         work()
+    elif choice == '7':
+        run_turtle_game()
     elif choice == 'credits':
-        print("Made by Alt2662. Thanks to ChatGPT for the optimization, and 'Niko' for certain optimization.")
+        print("Made by Alt2662. Thanks to ChatGPT for optimization, and 'Niko' for inspiration.")
+
+
 
 
 username = get_username()
